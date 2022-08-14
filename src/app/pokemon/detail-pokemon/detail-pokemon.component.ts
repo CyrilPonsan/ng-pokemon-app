@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import { AuthService } from "src/app/auth.service";
 import { Pokemon } from "../pokemon";
 import { PokemonService } from "../pokemon.service";
 
@@ -12,6 +13,7 @@ export class DetailPokemonComponent implements OnInit {
   pokemon!: Pokemon | undefined;
 
   constructor(
+    private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router,
     private pokemonService: PokemonService
@@ -27,9 +29,11 @@ export class DetailPokemonComponent implements OnInit {
   }
 
   deletePokemon(pokemon: Pokemon): void {
-    this.pokemonService
-      .deletePokemonById(pokemon.id)
-      .subscribe(() => this.goBack());
+    if (this.authService.isLoggedIn) {
+      this.pokemonService
+        .deletePokemonById(pokemon.id)
+        .subscribe(() => this.goBack());
+    }
   }
 
   goBack(): void {
