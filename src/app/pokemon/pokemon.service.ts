@@ -1,15 +1,14 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { catchError, Observable, of, tap } from "rxjs";
+import { UrlsService } from "../urls.service";
 import { Pokemon } from "./pokemon";
 
 @Injectable()
 export class PokemonService {
-  private port: number = 3000;
-  private localUrl: string = `http://127.0.0.1:${this.port}/`;
-  private baseUrl: string = this.localUrl;
+  private baseUrl: string = this.urlsService.getBaseUrl();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private urlsService: UrlsService) {}
 
   getPokemonList(): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}api/pokemons`).pipe(
@@ -40,7 +39,7 @@ export class PokemonService {
       headers: new HttpHeaders({ "Content-Type": "application/json" }),
     };
     return this.http
-      .put(`${this.baseUrl}api/pokemons`, pokemon, httpOptions)
+      .put<any>(`${this.baseUrl}api/pokemons/${pokemon.id}`, pokemon)
       .pipe(
         tap((response) => this.log(response)),
         catchError((error) => this.handleError(error, null))
