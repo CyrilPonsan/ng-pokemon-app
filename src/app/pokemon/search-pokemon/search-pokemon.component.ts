@@ -3,6 +3,7 @@ import { Router } from "@angular/router";
 import {
   debounceTime,
   distinctUntilChanged,
+  map,
   Observable,
   Subject,
   switchMap,
@@ -17,7 +18,7 @@ import { PokemonService } from "../pokemon.service";
 })
 export class SearchPokemonComponent implements OnInit {
   searchTerms: Subject<string> = new Subject<string>();
-  pokemons$!: Observable<Pokemon[]>;
+  pokemons$!: Observable<any>;
 
   constructor(private pokemonService: PokemonService, private router: Router) {}
 
@@ -25,7 +26,8 @@ export class SearchPokemonComponent implements OnInit {
     this.pokemons$ = this.searchTerms.pipe(
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap((term) => this.pokemonService.searchPokemonList(term))
+      switchMap((term) => this.pokemonService.searchPokemonList(term)),
+      map((response) => (response = response.data))
     );
   }
 

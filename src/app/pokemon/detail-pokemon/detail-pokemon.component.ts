@@ -22,7 +22,7 @@ export class DetailPokemonComponent implements OnInit {
     if (pokemonId) {
       this.pokemonService
         .getPokemonById(+pokemonId)
-        .subscribe((pokemon) => (this.pokemon = pokemon));
+        .subscribe((pokemon) => (this.pokemon = pokemon.data));
     }
   }
 
