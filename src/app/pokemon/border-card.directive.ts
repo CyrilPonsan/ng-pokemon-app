@@ -20,10 +20,12 @@ export class BorderCardDirective {
 
   @HostListener("mouseenter") onMouseEnter() {
     this.setBorder(this.borderColor || this.defaultColor);
+    this.setCursorPointer();
   }
 
   @HostListener("mouseleave") onMouseLeave() {
     this.setBorder(this.initialColor);
+    this.setCursorNormal();
   }
 
   private setHeight(height: number): void {
@@ -32,5 +34,13 @@ export class BorderCardDirective {
 
   private setBorder(color: string): void {
     this.el.nativeElement.style.border = `solid 4px ${color}`;
+  }
+
+  private setCursorPointer(): void {
+    this.el.nativeElement.style.cursor = "pointer";
+  }
+
+  private setCursorNormal(): void {
+    this.el.nativeElement.style.cursor = "normal";
   }
 }
